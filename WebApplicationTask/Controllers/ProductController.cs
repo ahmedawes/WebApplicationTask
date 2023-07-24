@@ -1,31 +1,30 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using WebApplicationTask.Data;
-using WebApplicationTask.Models;
+using NToastNotify;
+using WebApplicationTask.Models.Models;
+using WebApplicationTask.Models.Repository;
 
 namespace WebApplicationTask.Controllers
 {
 	[Authorize]
 	public class ProductController : Controller
     {
-        private readonly AppDbContext _Context;
-        public ProductController(AppDbContext context)
+        private readonly IBaseRepository<Product> _ProductRepository;
+        private readonly IToastNotification _ToastNotification;
+        public ProductController( IBaseRepository<Product> ProductRepository, IToastNotification ToastNotification)
         {
-            _Context = context;
+            _ProductRepository = ProductRepository;
+            _ToastNotification = ToastNotification;
         }
 
         // GET: ProductController
         public ActionResult Index()
         {
-            List<Product> ListOfProducts =_Context.Products.ToList();
-            return View(ListOfProducts);
+            return View(_ProductRepository.GetAll());
         }
 
-      
 
-        // GET: ProductController/Create
+        //GET: ProductController/Create
         public ActionResult Create()
         {
             return View();
@@ -38,10 +37,10 @@ namespace WebApplicationTask.Controllers
         {
             if (ModelState.IsValid)
             {
-                _Context.Products.Add( prod );
-                _Context.SaveChanges();
-			    TempData["success"] = "Category created Successfully";
-			    return RedirectToAction("Index");   
+                _ProductRepository.Add( prod );
+                _ProductRepository.SaveChanges();
+                _ToastNotification.AddSuccessToastMessage("Product created Successfully");
+			    return RedirectToAction("Index");
             }
             else
             {
@@ -52,7 +51,7 @@ namespace WebApplicationTask.Controllers
         // GET: ProductController/Edit/5
         public ActionResult Edit(int id)
         {
-            Product? data = _Context.Products.FirstOrDefault(e=>e.Id==id);
+            Product? data = _ProductRepository.Find(e => e.Id == id);
             if (data == null)
             {
                 return NotFound();
@@ -67,9 +66,9 @@ namespace WebApplicationTask.Controllers
         {
             if (ModelState.IsValid)
             {
-               _Context.Products.Update(prod);
-               _Context.SaveChanges();
-			    TempData["Success"] = "Product Edited Successfully";
+               _ProductRepository.Update( prod );
+               _ProductRepository.SaveChanges();
+				_ToastNotification.AddSuccessToastMessage("Product Edited Successfully");
 				return RedirectToAction("Index");
 			}
 			else 
@@ -78,26 +77,16 @@ namespace WebApplicationTask.Controllers
             }
         }
 
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int Id)
-        {
-            Product? DataForDelete = _Context.Products.FirstOrDefault(e=>e.Id == Id);
-            if (DataForDelete == null)
-            {
-                return NotFound();
-            }
-            return View(DataForDelete);
-        }
 
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(Product prod)
+        // ProductController/Delete/5
+        //[ValidateAntiForgeryToken]
+        public ActionResult DeleteBYid(int Id )
         {
-            _Context.Products.Remove(prod);
-            _Context.SaveChanges();
-			TempData["Success"] = "Category Deleted Successfully";
+            Product resualt = _ProductRepository.Find(e=> e.Id == Id);
+            _ProductRepository.Remove(resualt);
+            _ProductRepository.SaveChanges();
+			//_ToastNotification.AddSuccessToastMessage("Product Deleted Successfully");
 			return RedirectToAction("Index");
-        }
+		}
     }
 }

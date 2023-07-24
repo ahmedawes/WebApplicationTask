@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using WebApplicationTask.Data;
 using Microsoft.AspNetCore.Identity;
-using System;
-using Microsoft.Extensions.DependencyInjection;
+using WebApplicationTask.DataAcess.Data;
+using WebApplicationTask.Models.Repository;
+using WebApplicationTask.DataAcess.Repositers;
+using NToastNotify;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,16 @@ builder.Services.AddRazorPages();
 // Configure AppDbContext 
 builder.Services.AddDbContext<AppDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddMvc().AddNToastNotifyToastr(new ToastrOptions()
+{
+	ProgressBar=true,
+	PositionClass=ToastPositions.TopRight,
+	PreventDuplicates=true,
+	CloseButton=true,
+});
+
+builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();

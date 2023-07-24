@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace WebApplicationTask.Migrations
+namespace WebApplicationTask.DataAcess.Migrations
 {
-    /// <inheritdoc />
-    public partial class Add_Idntity : Migration
+	/// <inheritdoc />
+	public partial class Add_Idntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

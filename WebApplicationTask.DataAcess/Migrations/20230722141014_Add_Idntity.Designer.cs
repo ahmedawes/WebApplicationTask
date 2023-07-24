@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApplicationTask.Data;
+using WebApplicationTask.DataAcess.Data;
 
 #nullable disable
 
-namespace WebApplicationTask.Migrations
+namespace WebApplicationTask.DataAcess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230722141014_Add_Idntity")]

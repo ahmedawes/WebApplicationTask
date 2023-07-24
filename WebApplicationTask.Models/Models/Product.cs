@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplicationTask.Models
+namespace WebApplicationTask.Models.Models
 {
 	public class Product
 	{

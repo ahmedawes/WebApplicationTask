@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WebApplicationTask.Migrations
+namespace WebApplicationTask.DataAcess.Migrations
 {
     /// <inheritdoc />
     public partial class Initial_Migration : Migration
